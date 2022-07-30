@@ -4,6 +4,9 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from reg import models
+from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
+
 
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -17,6 +20,12 @@ class RegisterView(generics.GenericAPIView):
         "user": UserSerializer(user, context=self.get_serializer_context()).data,
         # "token": AuthToken.objects.create(user)[1]
         })
+
+class RegisterList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [IsAuthenticated]
+    
     
     # def post(self, request, *args, **kwargs):
     #     serializer = self.get_serializer(data=request.data)
